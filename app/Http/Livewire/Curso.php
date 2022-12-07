@@ -3,23 +3,49 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Curso as CursoDB;
 
 class Curso extends Component
 {
-    public $contador = 0;
+    public $error = null;
+    public $curso;
+    public $cursos = null;
+
+    public function mount()
+    {
+        $this->cursos = CursoDB::all();
+
+    }
     
     public function render()
     {
         return view('livewire.curso');
     }
 
-    public function incremento()
+    public function save()
     {
-        $this->contador++;
+        //Guardar el curso
+        if($this->curso != null && $this->curso != ''){
+            CursoDB::create([
+                'nombre' => $this->curso,
+            ]);
+            $this->error = '';
+            $this->curso = '';
+
+            //Cargar todos los cursos
+            $this->cursos = CursoDB::all();
+        }
+        else{
+            $this->error = "Debe Ingresar un nombre";
+        }
     }
 
-    public function reinicio()
+    public function eliminar($id)
     {
-        $this->contador = 0;
+        //Eliminar el curso
+        $cursoEliminar = CursoDB::find($id);
+        $cursoEliminar->delete();
+        //Cargar todos los cursos
+        $this->cursos = CursoDB::all();
     }
 }

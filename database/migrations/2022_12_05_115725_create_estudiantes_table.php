@@ -16,7 +16,7 @@ class CreateEstudiantesTable extends Migration
         Schema::create('estudiantes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('curso_id')->constrained();
+            $table->foreignId('curso_id')->constrained(cursos);
             $table->timestamps();
         });
     }
